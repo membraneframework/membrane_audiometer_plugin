@@ -60,7 +60,7 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
   @impl true
   def handle_prepared_to_stopped(_ctx, state) do
     {:ok, :cancel} = :timer.cancel(state.timer)
-    {:ok, %{state | counter: 0, timer: nil}}
+    {:ok, %{state | timer: nil}}
   end
 
   @impl true
