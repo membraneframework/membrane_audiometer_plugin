@@ -6,7 +6,7 @@ defmodule Membrane.Element.Audiometer.Peakmeter.Notification.Measurement do
   """
 
   @type t :: %__MODULE__{
-          amplitudes: [number | :infinity]
+          amplitudes: [number | :infinity | :clip]
         }
 
   defstruct amplitudes: nil

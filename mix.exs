@@ -56,7 +56,7 @@ defmodule Membrane.Element.Audiometer.Mixfile do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:membrane_core, "~> 0.2"},
-      {:membrane_caps_audio_raw, "~> 0.1.2"}
+      {:membrane_caps_audio_raw, "~> 0.1.5"}
     ]
   end
 end

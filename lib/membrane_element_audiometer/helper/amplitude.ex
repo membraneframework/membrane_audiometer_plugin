@@ -6,13 +6,24 @@ defmodule Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude do
   @doc """
   Finds frame within given payload that has the highest amplitude for any of its channels.
 
-  It returns `{:ok, {values, rest}}`, where:
+  On success, it returns `{:ok, {values, rest}}`, where:
 
-  * `values` is a list of amplitudes per channel expressed in decibels, or `:infinity`,
+  * `values` is a list of amplitudes per channel expressed in decibels, or one of `:infinity` 
+    or `:clip`,
   * `rest` is a binary containing payload remaining after processing if given payload contained
     incomplete frames.
+
+  On error it returns, `{:error, reason}`, where `reason` is one of the following:
+
+  * `:empty` - the payload was empty.
   """
-  @spec find_amplitudes(binary, Raw.t()) :: {:ok, {[number | :infinity], binary}}
+  @spec find_amplitudes(binary, Raw.t()) :: 
+    {:ok, {[number | :infinity | :clip], binary}} |
+    {:error, any}
+  def find_amplitudes(<< >>, _caps) do
+    {:error, :empty}
+  end
+
   def find_amplitudes(payload, caps) do
     # Get silence as a point of reference
     silence_payload = Raw.sound_of_silence(caps)
@@ -30,7 +41,12 @@ defmodule Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude do
       )
 
     # Convert values into decibels
-    max_amplitude_value = Raw.sample_max(caps) - silence_value
+    max_amplitude_value = if Raw.sample_type_float?(caps) do
+      1.0
+    else
+      # +1 is needed so max int value for frame does not cause clipping
+      Raw.sample_max(caps) - silence_value + 1 
+    end
 
     {:ok, frame_values_in_dbs} = do_convert_values_to_dbs(frame_values, max_amplitude_value, [])
 
@@ -128,14 +144,17 @@ defmodule Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude do
   end
 
   defp do_convert_values_to_dbs([head | tail], max_amplitude_value, acc) do
-    value_in_dbs =
-      if(head > 0) do
-        20 * :math.log10(head / max_amplitude_value)
-      else
-        :infinity
+    value =
+      cond do
+        head > max_amplitude_value ->
+          :clip
+        head > 0 ->
+          20 * :math.log10(head / max_amplitude_value)
+        true ->
+          :infinity
       end
 
-    do_convert_values_to_dbs(tail, max_amplitude_value, [value_in_dbs | acc])
+    do_convert_values_to_dbs(tail, max_amplitude_value, [value | acc])
   end
 
   defp do_convert_values_to_dbs([], _max_amplitude_value, acc), do: {:ok, Enum.reverse(acc)}
