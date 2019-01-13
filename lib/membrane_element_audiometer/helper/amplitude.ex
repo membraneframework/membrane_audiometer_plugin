@@ -17,10 +17,10 @@ defmodule Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude do
 
   * `:empty` - the payload was empty.
   """
-  @spec find_amplitudes(binary, Raw.t()) :: 
-    {:ok, {[number | :infinity | :clip], binary}} |
-    {:error, any}
-  def find_amplitudes(<< >>, _caps) do
+  @spec find_amplitudes(binary, Raw.t()) ::
+          {:ok, {[number | :infinity | :clip], binary}}
+          | {:error, any}
+  def find_amplitudes(<<>>, _caps) do
     {:error, :empty}
   end
 
@@ -41,12 +41,13 @@ defmodule Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude do
       )
 
     # Convert values into decibels
-    max_amplitude_value = if Raw.sample_type_float?(caps) do
-      1.0
-    else
-      # +1 is needed so max int value for frame does not cause clipping
-      Raw.sample_max(caps) - silence_value + 1 
-    end
+    max_amplitude_value =
+      if Raw.sample_type_float?(caps) do
+        1.0
+      else
+        # +1 is needed so max int value for frame does not cause clipping
+        Raw.sample_max(caps) - silence_value + 1
+      end
 
     {:ok, frame_values_in_dbs} = do_convert_values_to_dbs(frame_values, max_amplitude_value, [])
 
@@ -148,8 +149,10 @@ defmodule Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude do
       cond do
         head > max_amplitude_value ->
           :clip
+
         head > 0 ->
           20 * :math.log10(head / max_amplitude_value)
+
         true ->
           :infinity
       end
