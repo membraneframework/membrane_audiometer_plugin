@@ -1,6 +1,6 @@
 # Membrane Multimedia Framework: AudioMeter Element
 
-[![Build Status](https://travis-ci.com/membraneframework/membrane-element-audiometer.svg?branch=master)](https://travis-ci.com/membraneframework/membrane-element-audiometer)
+[![Build Status](https://travis-ci.org/membraneframework/membrane-element-audiometer.svg?branch=master)](https://travis-ci.org/membraneframework/membrane-element-audiometer)
 
 This package provides elements that can be used to measure level of the audio stream.
 
