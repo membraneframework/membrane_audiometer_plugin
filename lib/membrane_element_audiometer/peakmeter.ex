@@ -26,9 +26,16 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
   alias Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude
   alias Membrane.Element.Audiometer.Peakmeter.Notification.Measurement
 
-  def_input_pads input: [availability: :always, mode: :pull, caps: Raw, demand_unit: :buffers]
+  def_input_pad :input, 
+    availability: :always, 
+    mode: :pull, 
+    caps: Raw, 
+    demand_unit: :buffers
 
-  def_output_pads output: [availability: :always, mode: :pull, caps: Raw]
+  def_output_pad :output, 
+    availability: :always, 
+    mode: :pull, 
+    caps: Raw
 
   def_options interval: [
                 type: :integer,

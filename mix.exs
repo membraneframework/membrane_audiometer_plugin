@@ -1,7 +1,7 @@
 defmodule Membrane.Element.Audiometer.Mixfile do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.2.1"
   @github_url "https://github.com/membraneframework/membrane-element-audiometer"
 
   def project do
@@ -55,8 +55,8 @@ defmodule Membrane.Element.Audiometer.Mixfile do
   defp deps do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:membrane_core, "~> 0.2"},
-      {:membrane_caps_audio_raw, "~> 0.1.5"}
+      {:membrane_core, "~> 0.3.0"},
+      {:membrane_caps_audio_raw, "~> 0.1.7"}
     ]
   end
 end
