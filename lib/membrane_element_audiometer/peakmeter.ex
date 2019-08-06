@@ -68,6 +68,10 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
     {{:ok, [demand: {:input, size}]}, state}
   end
 
+  def handle_demand(:output, _size, :bytes, _ctx, state) do
+    {{:ok, demand: :input}, state}
+  end
+
   @impl true
   def handle_process(
         :input,
