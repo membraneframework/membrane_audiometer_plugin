@@ -87,7 +87,7 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
         state
       ) do
     new_state = %{state | queue: state.queue <> payload}
-    {{:ok, [buffer: {:output, buffer}]}, new_state}
+    {{:ok, [buffer: {:output, buffer}, redemand: :output]}, new_state}
   end
 
   @impl true
