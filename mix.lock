@@ -1,14 +1,14 @@
 %{
-  "bimap": {:hex, :bimap, "1.0.0", "80b707adb832cc7670309c85757caf3493b29a3e484cc6eafd65fceaeb107c05", [:mix], [], "hexpm"},
-  "bunch": {:hex, :bunch, "0.1.2", "2389a4bcdb62382fbfeed9e19952cc22452dc0c01b4bcac941cce00ef212d7b4", [:mix], [], "hexpm"},
+  "bimap": {:hex, :bimap, "1.0.1", "6c92d76d73ed1cf04b2b6e8548c732256da5fe9efe9ab64b90724db58bdc8f18", [:mix], [], "hexpm"},
+  "bunch": {:hex, :bunch, "1.1.0", "bf9ca22c788ad4f486afb4d6d5e1211ab09cbee473c5cf370e6e550b1df4bc4b", [:mix], [], "hexpm"},
   "earmark": {:hex, :earmark, "1.3.0", "17f0c38eaafb4800f746b457313af4b2442a8c2405b49c645768680f900be603", [:mix], [], "hexpm"},
   "espec": {:hex, :espec, "1.5.0", "0a6bee7360b478d7267df7f823107b458923f49841e4b96747bcb442108104d2", [:mix], [{:meck, "0.8.9", [hex: :meck, repo: "hexpm", optional: false]}], "hexpm"},
   "ex_doc": {:hex, :ex_doc, "0.19.1", "519bb9c19526ca51d326c060cb1778d4a9056b190086a8c6c115828eaccea6cf", [:mix], [{:earmark, "~> 1.1", [hex: :earmark, repo: "hexpm", optional: false]}, {:makeup_elixir, "~> 0.7", [hex: :makeup_elixir, repo: "hexpm", optional: false]}], "hexpm"},
   "makeup": {:hex, :makeup, "0.5.5", "9e08dfc45280c5684d771ad58159f718a7b5788596099bdfb0284597d368a882", [:mix], [{:nimble_parsec, "~> 0.4", [hex: :nimble_parsec, repo: "hexpm", optional: false]}], "hexpm"},
   "makeup_elixir": {:hex, :makeup_elixir, "0.10.0", "0f09c2ddf352887a956d84f8f7e702111122ca32fbbc84c2f0569b8b65cbf7fa", [:mix], [{:makeup, "~> 0.5.5", [hex: :makeup, repo: "hexpm", optional: false]}], "hexpm"},
   "meck": {:hex, :meck, "0.8.9", "64c5c0bd8bcca3a180b44196265c8ed7594e16bcc845d0698ec6b4e577f48188", [:rebar3], [], "hexpm"},
-  "membrane_caps_audio_raw": {:hex, :membrane_caps_audio_raw, "0.1.5", "d4becb167f37fab52700ac7f19bd09b3f580eee3b71f4586b6f0dd1e01f2d5f5", [:mix], [{:bimap, "~> 1.0", [hex: :bimap, repo: "hexpm", optional: false]}, {:bunch, "~> 0.1", [hex: :bunch, repo: "hexpm", optional: false]}, {:membrane_core, "~> 0.2", [hex: :membrane_core, repo: "hexpm", optional: false]}], "hexpm"},
-  "membrane_core": {:hex, :membrane_core, "0.2.0", "de05223ce50661518d47ac9bfb79854483490d8322876724c86cef3aa806b66c", [:mix], [{:bunch, "~> 0.1.2", [hex: :bunch, repo: "hexpm", optional: false]}, {:qex, "~> 0.3", [hex: :qex, repo: "hexpm", optional: false]}], "hexpm"},
+  "membrane_caps_audio_raw": {:hex, :membrane_caps_audio_raw, "0.1.7", "419467f210b556b1790701383731c839393a8aec3ab3a4cbc9b971ef5bd521f4", [:mix], [{:bimap, "~> 1.0", [hex: :bimap, repo: "hexpm", optional: false]}, {:bunch, "~> 1.0", [hex: :bunch, repo: "hexpm", optional: false]}, {:membrane_core, "~> 0.3.0", [hex: :membrane_core, repo: "hexpm", optional: false]}], "hexpm"},
+  "membrane_core": {:hex, :membrane_core, "0.3.1", "3c3197d7aea8068957ee49d5b495cb73f5770e79e8ac3d8ea62eb34ac3300856", [:mix], [{:bunch, "~> 1.1", [hex: :bunch, repo: "hexpm", optional: false]}, {:qex, "~> 0.3", [hex: :qex, repo: "hexpm", optional: false]}], "hexpm"},
   "nimble_parsec": {:hex, :nimble_parsec, "0.4.0", "ee261bb53214943679422be70f1658fff573c5d0b0a1ecd0f18738944f818efe", [:mix], [], "hexpm"},
   "qex": {:hex, :qex, "0.5.0", "5a3a9becf67d4006377c4c247ffdaaa8ae5b3634a0caadb788dc24d6125068f4", [:mix], [], "hexpm"},
 }

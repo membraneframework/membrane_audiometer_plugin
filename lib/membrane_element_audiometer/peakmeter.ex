@@ -26,9 +26,16 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
   alias Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude
   alias Membrane.Element.Audiometer.Peakmeter.Notification.Measurement
 
-  def_input_pads input: [availability: :always, mode: :pull, caps: Raw, demand_unit: :buffers]
+  def_input_pad :input, 
+    availability: :always, 
+    mode: :pull, 
+    caps: Raw, 
+    demand_unit: :buffers
 
-  def_output_pads output: [availability: :always, mode: :pull, caps: Raw]
+  def_output_pad :output, 
+    availability: :always, 
+    mode: :pull, 
+    caps: Raw
 
   def_options interval: [
                 type: :integer,
@@ -68,6 +75,10 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
     {{:ok, [demand: {:input, size}]}, state}
   end
 
+  def handle_demand(:output, _size, :bytes, _ctx, state) do
+    {{:ok, demand: :input}, state}
+  end
+
   @impl true
   def handle_process(
         :input,
@@ -76,7 +87,7 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
         state
       ) do
     new_state = %{state | queue: state.queue <> payload}
-    {{:ok, [buffer: {:output, buffer}]}, new_state}
+    {{:ok, [buffer: {:output, buffer}, redemand: :output]}, new_state}
   end
 
   @impl true
