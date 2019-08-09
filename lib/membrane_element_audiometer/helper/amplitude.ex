@@ -8,7 +8,7 @@ defmodule Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude do
 
   On success, it returns `{:ok, {values, rest}}`, where:
 
-  * `values` is a list of amplitudes per channel expressed in decibels, or one of `:infinity` 
+  * `values` is a list of amplitudes per channel expressed in decibels, or one of `:infinity`
     or `:clip`,
   * `rest` is a binary containing payload remaining after processing if given payload contained
     incomplete frames.

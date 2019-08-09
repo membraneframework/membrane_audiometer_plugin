@@ -1,23 +1,23 @@
 defmodule Membrane.Element.Audiometer.Peakmeter do
   @moduledoc """
-  This element computes peaks in each channel of the given signal at 
+  This element computes peaks in each channel of the given signal at
   regular time intervals, regardless if it receives data or not.
 
   It uses erlang's `:timer.send_interval/2` which might not provide
   perfect accuracy.
 
-  It accepts data of any format specified in Membrane.Caps.Audio.Raw 
+  It accepts data of any format specified in Membrane.Caps.Audio.Raw
   module.
 
   It will periodically emit notifications, of the following format:
 
-  * `{:audiometer, :underrun}` - if there were not enough data to 
+  * `{:audiometer, :underrun}` - if there were not enough data to
     compute audio level within given interval,
-  * `{:audiometer, {:measurement, measurement}}` - where `measurement` 
+  * `{:audiometer, {:measurement, measurement}}` - where `measurement`
     is a `Membrane.Element.Audiometer.Peakmeter.Notification.Measurement`
     struct containing computed audio levels. See its documentation for
     more details about the actual value format.
-   
+
   See `options/0` for available options.
   """
   use Membrane.Element.Base.Filter
@@ -26,15 +26,15 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
   alias Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude
   alias Membrane.Element.Audiometer.Peakmeter.Notification.Measurement
 
-  def_input_pad :input, 
-    availability: :always, 
-    mode: :pull, 
-    caps: Raw, 
+  def_input_pad :input,
+    availability: :always,
+    mode: :pull,
+    caps: Raw,
     demand_unit: :buffers
 
-  def_output_pad :output, 
-    availability: :always, 
-    mode: :pull, 
+  def_output_pad :output,
+    availability: :always,
+    mode: :pull,
     caps: Raw
 
   def_options interval: [
