@@ -1,7 +1,7 @@
-defmodule Membrane.Element.Audiometer.Peakmeter.Helper.AmplitudeTest do
+defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
   use ExUnit.Case
 
-  alias Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude
+  alias Membrane.Audiometer.Peakmeter.Amplitude
   alias Membrane.Caps.Audio.Raw
 
   @caps_mono_u8 %Raw{channels: 1, sample_rate: 44100, format: :u8}

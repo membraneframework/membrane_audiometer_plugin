@@ -1,4 +1,4 @@
-defmodule Membrane.Element.Audiometer.Peakmeter do
+defmodule Membrane.Audiometer.Peakmeter do
   @moduledoc """
   This element computes peaks in each channel of the given signal at
   regular time intervals, regardless if it receives data or not.
@@ -14,17 +14,17 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
   * `{:audiometer, :underrun}` - if there were not enough data to
     compute audio level within given interval,
   * `{:audiometer, {:measurement, measurement}}` - where `measurement`
-    is a `Membrane.Element.Audiometer.Peakmeter.Notification.Measurement`
+    is a `Membrane.Audiometer.Peakmeter.Notification.Measurement`
     struct containing computed audio levels. See its documentation for
     more details about the actual value format.
 
   See `options/0` for available options.
   """
-  use Membrane.Element.Base.Filter
-  use Membrane.Log, tags: :membrane_element_audiometer
+  use Membrane.Filter
+  alias __MODULE__.Amplitude
   alias Membrane.Caps.Audio.Raw
-  alias Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude
-  alias Membrane.Element.Audiometer.Peakmeter.Notification.Measurement
+
+  @type amplitude_t :: [number | :infinity | :clip]
 
   def_input_pad :input,
     availability: :always,
@@ -42,7 +42,7 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
                 description: """
                 How often peakmeter should emit messages containing sound level (in Membrane.Time units).
                 """,
-                default: 50 |> Membrane.Time.millisecond()
+                default: 50 |> Membrane.Time.milliseconds()
               ]
 
   # Private API
@@ -51,8 +51,7 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
   def handle_init(%__MODULE__{interval: interval}) do
     state = %{
       interval: interval,
-      queue: <<>>,
-      timer: nil
+      queue: <<>>
     }
 
     {:ok, state}
@@ -60,14 +59,12 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
 
   @impl true
   def handle_prepared_to_playing(_ctx, state) do
-    {:ok, timer} = :timer.send_interval(state.interval |> Membrane.Time.to_milliseconds(), :tick)
-    {:ok, %{state | timer: timer}}
+    {{:ok, start_timer: {:timer, state.interval}}, state}
   end
 
   @impl true
   def handle_prepared_to_stopped(_ctx, state) do
-    {:ok, :cancel} = :timer.cancel(state.timer)
-    {:ok, %{state | timer: nil}}
+    {{:ok, stop_timer: :timer}, state}
   end
 
   @impl true
@@ -91,31 +88,19 @@ defmodule Membrane.Element.Audiometer.Peakmeter do
   end
 
   @impl true
-  def handle_other(
-        :tick,
-        %Membrane.Element.CallbackContext.Other{
-          pads: %{input: %Membrane.Element.Pad.Data{caps: nil}}
-        },
-        state
-      ) do
-    {{:ok, notify: {:audiometer, :underrun}}, state}
+  def handle_tick(:timer, %{pads: %{input: %Pad.Data{caps: nil}}}, state) do
+    {{:ok, notify: :underrun}, state}
   end
 
-  def handle_other(
-        :tick,
-        %Membrane.Element.CallbackContext.Other{
-          pads: %{input: %Membrane.Element.Pad.Data{caps: caps}}
-        },
-        state
-      ) do
+  @impl true
+  def handle_tick(:timer, %{pads: %{input: %Pad.Data{caps: caps}}}, state) do
     frame_size = Raw.frame_size(caps)
 
     if byte_size(state.queue) < frame_size do
       {{:ok, notify: {:audiometer, :underrun}}, state}
     else
       {:ok, {amplitudes, rest}} = Amplitude.find_amplitudes(state.queue, caps)
-      notification = {:audiometer, {:measurement, %Measurement{amplitudes: amplitudes}}}
-      {{:ok, notify: notification}, %{state | queue: rest}}
+      {{:ok, notify: {:amplitudes, amplitudes}}, %{state | queue: rest}}
     end
   end
 end

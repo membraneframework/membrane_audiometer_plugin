@@ -1,12 +1,12 @@
-defmodule Membrane.Element.Audiometer.Mixfile do
+defmodule Membrane.Audiometer.Plugin.Mixfile do
   use Mix.Project
 
   @version "0.2.1"
-  @github_url "https://github.com/membraneframework/membrane-element-audiometer"
+  @github_url "https://github.com/membrane_audiometer_plugin"
 
   def project do
     [
-      app: :membrane_element_audiometer,
+      app: :membrane_audiometer_plugin,
       compilers: Mix.compilers(),
       version: @version,
       elixir: "~> 1.7",
@@ -23,10 +23,7 @@ defmodule Membrane.Element.Audiometer.Mixfile do
   end
 
   def application do
-    [
-      extra_applications: [],
-      mod: {Membrane.Element.Audiometer, []}
-    ]
+    [extra_applications: []]
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
@@ -55,8 +52,8 @@ defmodule Membrane.Element.Audiometer.Mixfile do
   defp deps do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:membrane_core, "~> 0.3.0"},
-      {:membrane_caps_audio_raw, "~> 0.1.7"}
+      {:membrane_core, "~> 0.5.2"},
+      {:membrane_caps_audio_raw, "~> 0.2.0"}
     ]
   end
 end
