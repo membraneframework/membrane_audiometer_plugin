@@ -1,4 +1,4 @@
-defmodule Membrane.Element.Audiometer.Peakmeter.Helper.Amplitude do
+defmodule Membrane.Audiometer.Peakmeter.Amplitude do
   @moduledoc false
 
   alias Membrane.Caps.Audio.Raw

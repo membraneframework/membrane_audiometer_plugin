@@ -1,8 +1,10 @@
 # Membrane Multimedia Framework: AudioMeter Element
 
-[![CircleCI](https://circleci.com/gh/membraneframework/membrane-element-audiometer.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane-element-audiometer)
+[![Hex.pm](https://img.shields.io/hexpm/v/membrane_audiometer_plugin.svg)](https://hex.pm/packages/membrane_audiometer_plugin)
+[![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/membrane_audiometer_plugin/)
+[![CircleCI](https://circleci.com/gh/membraneframework/membrane_audiometer_plugin.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane_audiometer_plugin)
 
-This package provides elements that can be used to measure level of the audio stream.
+This package provides elements for measuring level of the audio stream.
 
 Currently it is capable of measuring maximum amplitudes.
 
@@ -13,7 +15,7 @@ It is part of [Membrane Multimedia Framework](https://membraneframework.org).
 Add the following line to your `deps` in `mix.exs`.  Run `mix deps.get`.
 
 ```elixir
-{:membrane_element_audiometer, "~> 0.2"}
+{:membrane_audiometer_plugin, "~> 0.2.1"}
 ```
 
 ## Copyright and License
