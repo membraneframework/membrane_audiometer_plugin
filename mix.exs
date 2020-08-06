@@ -9,7 +9,7 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
       app: :membrane_audiometer_plugin,
       compilers: Mix.compilers(),
       version: @version,
-      elixir: "~> 1.7",
+      elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
       description: "Element capable of measuring audio level",
       package: package(),
@@ -45,7 +45,7 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
         "GitHub" => @github_url,
         "Membrane Framework Homepage" => "https://membraneframework.org"
       },
-      files: ["lib", "mix.exs", "README*", "LICENSE*", ".formatter.exs", "c_src"]
+      files: ["lib", "mix.exs", "README*", "LICENSE*", ".formatter.exs"]
     ]
   end
 
