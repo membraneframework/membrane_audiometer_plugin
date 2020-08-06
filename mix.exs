@@ -1,7 +1,7 @@
 defmodule Membrane.Audiometer.Plugin.Mixfile do
   use Mix.Project
 
-  @version "0.2.1"
+  @version "0.3.0"
   @github_url "https://github.com/membrane_audiometer_plugin"
 
   def project do
@@ -11,9 +11,9 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
       version: @version,
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      description: "Membrane Multimedia Framework (Audiometer Element)",
+      description: "Element capable of measuring audio level",
       package: package(),
-      name: "Membrane Element: Audiometer",
+      name: "Membrane Audiometer plugin",
       source_url: @github_url,
       docs: docs(),
       homepage_url: "https://membraneframework.org",
@@ -27,7 +27,7 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(_env), do: ["lib"]
 
   defp docs do
     [

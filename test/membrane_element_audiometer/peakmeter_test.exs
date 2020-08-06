@@ -25,6 +25,6 @@ defmodule Membrane.Audiometer.PeakmeterTest do
     end)
 
     Testing.Pipeline.stop(pipeline)
-    assert_pipeline_playback_changed(pipeline, _, :stopped)
+    assert_pipeline_playback_changed(pipeline, _prev_state, :stopped)
   end
 end

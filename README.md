@@ -1,6 +1,8 @@
 # Membrane Multimedia Framework: AudioMeter Element
 
-[![CircleCI](https://circleci.com/gh/membrane_audiometer_plugin)
+[![Hex.pm](https://img.shields.io/hexpm/v/membrane_audiometer_plugin.svg)](https://hex.pm/packages/membrane_audiometer_plugin)
+[![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/membrane_audiometer_plugin/)
+[![CircleCI](https://circleci.com/gh/membraneframework/membrane_audiometer_plugin.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane_audiometer_plugin)
 
 This package provides elements for measuring level of the audio stream.
 
