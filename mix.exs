@@ -53,7 +53,9 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
     [
       {:membrane_core, "~> 0.9.0"},
       {:membrane_raw_audio_format, "~> 0.8.0"},
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
+      {:credo, "~> 1.6", runtime: false},
+      {:dialyxir, ">= 0.0.0", runtime: false}
     ]
   end
 end

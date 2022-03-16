@@ -4,28 +4,28 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
   alias Membrane.Audiometer.Peakmeter.Amplitude
   alias Membrane.RawAudio
 
-  @caps_mono_u8 %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u8}
-  @caps_mono_u16le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u16le}
-  @caps_mono_u24le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u24le}
-  @caps_mono_u32le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u32le}
-  @caps_mono_f32le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :f32le}
-  @caps_mono_f64le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :f64le}
-  @caps_mono_u16be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u16be}
-  @caps_mono_u24be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u24be}
-  @caps_mono_u32be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u32be}
-  @caps_mono_f32be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :f32be}
-  @caps_mono_f64be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :f64be}
-  @caps_stereo_u8 %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u8}
-  @caps_stereo_u16le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u16le}
-  @caps_stereo_u24le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u24le}
-  @caps_stereo_u32le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u32le}
-  @caps_stereo_u16be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u16be}
-  @caps_stereo_u24be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u24be}
-  @caps_stereo_u32be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u32be}
-  @caps_stereo_f32le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :f32le}
-  @caps_stereo_f32be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :f32be}
-  @caps_stereo_f64le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :f64le}
-  @caps_stereo_f64be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :f64be}
+  @caps_mono_u8 %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :u8}
+  @caps_mono_u16le %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :u16le}
+  @caps_mono_u24le %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :u24le}
+  @caps_mono_u32le %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :u32le}
+  @caps_mono_f32le %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :f32le}
+  @caps_mono_f64le %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :f64le}
+  @caps_mono_u16be %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :u16be}
+  @caps_mono_u24be %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :u24be}
+  @caps_mono_u32be %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :u32be}
+  @caps_mono_f32be %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :f32be}
+  @caps_mono_f64be %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :f64be}
+  @caps_stereo_u8 %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :u8}
+  @caps_stereo_u16le %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :u16le}
+  @caps_stereo_u24le %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :u24le}
+  @caps_stereo_u32le %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :u32le}
+  @caps_stereo_u16be %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :u16be}
+  @caps_stereo_u24be %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :u24be}
+  @caps_stereo_u32be %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :u32be}
+  @caps_stereo_f32le %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :f32le}
+  @caps_stereo_f32be %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :f32be}
+  @caps_stereo_f64le %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :f64le}
+  @caps_stereo_f64be %RawAudio{channels: 2, sample_rate: 44_100, sample_format: :f64be}
 
   describe "find_amplitudes/2" do
     # errors
@@ -72,21 +72,21 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
 
     # single mono u16le
     test "if given payload contains exactly one u16le mono frame which value is a max value for this format it returns 0 dB" do
-      payload = <<65535::integer-size(16)-unsigned-little>>
+      payload = <<65_535::integer-size(16)-unsigned-little>>
 
       assert {:ok, {[value], _rest}} = Amplitude.find_amplitudes(payload, @caps_mono_u16le)
       assert_in_delta value, 0, 0.1
     end
 
     test "if given payload contains exactly one u16le mono frame which value is neither a min nor max value for this format it returns amplitude in dB" do
-      payload = <<49151::integer-size(16)-unsigned-little>>
+      payload = <<49_151::integer-size(16)-unsigned-little>>
 
       assert {:ok, {[value], _rest}} = Amplitude.find_amplitudes(payload, @caps_mono_u16le)
       assert_in_delta value, -6.02, 0.1
     end
 
     test "if given payload contains exactly one u16le mono frame that is in the middle of scale it returns :infinity" do
-      payload = <<32768::integer-size(16)-unsigned-little>>
+      payload = <<32_768::integer-size(16)-unsigned-little>>
 
       assert {:ok, {[value], _rest}} = Amplitude.find_amplitudes(payload, @caps_mono_u16le)
       assert value == :infinity
@@ -177,21 +177,21 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
 
     # single mono u16be
     test "if given payload contains exactly one u16be mono frame which value is a max value for this format it returns 0 dB" do
-      payload = <<65535::integer-size(16)-unsigned-big>>
+      payload = <<65_535::integer-size(16)-unsigned-big>>
 
       assert {:ok, {[value], _rest}} = Amplitude.find_amplitudes(payload, @caps_mono_u16be)
       assert_in_delta value, 0, 0.1
     end
 
     test "if given payload contains exactly one u16be mono frame which value is neither a min nor max value for this format it returns amplitude in dB" do
-      payload = <<49151::integer-size(16)-unsigned-big>>
+      payload = <<49_151::integer-size(16)-unsigned-big>>
 
       assert {:ok, {[value], _rest}} = Amplitude.find_amplitudes(payload, @caps_mono_u16be)
       assert_in_delta value, -6.02, 0.1
     end
 
     test "if given payload contains exactly one u16be mono frame that is in the middle of scale it returns :infinity" do
-      payload = <<32768::integer-size(16)-unsigned-big>>
+      payload = <<32_768::integer-size(16)-unsigned-big>>
 
       assert {:ok, {[value], _rest}} = Amplitude.find_amplitudes(payload, @caps_mono_u16be)
       assert value == :infinity
@@ -330,7 +330,7 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
 
     # single stereo u16le equal
     test "if given payload contains exactly one u16le stereo frame which values are equal and a max value for this format it returns 0 dB" do
-      payload = <<65535::integer-size(16)-unsigned-little>>
+      payload = <<65_535::integer-size(16)-unsigned-little>>
 
       assert {:ok, {[value1, value2], _rest}} =
                Amplitude.find_amplitudes(payload <> payload, @caps_stereo_u16le)
@@ -340,7 +340,7 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
     end
 
     test "if given payload contains exactly one u16le stereo frame which values are equal and neither a min nor max value for this format it returns amplitude in dB" do
-      payload = <<49151::integer-size(16)-unsigned-little>>
+      payload = <<49_151::integer-size(16)-unsigned-little>>
 
       assert {:ok, {[value1, value2], _rest}} =
                Amplitude.find_amplitudes(payload <> payload, @caps_stereo_u16le)
@@ -350,7 +350,7 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
     end
 
     test "if given payload contains exactly one u16le stereo frame that is are the middle of the scale it returns :infinity" do
-      payload = <<32768::integer-size(16)-unsigned-little>>
+      payload = <<32_768::integer-size(16)-unsigned-little>>
 
       assert {:ok, {[value1, value2], _rest}} =
                Amplitude.find_amplitudes(payload <> payload, @caps_stereo_u16le)
@@ -474,7 +474,7 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
 
     # single stereo u16be equal
     test "if given payload contains exactly one u16be stereo frame which values are equal and a max value for this format it returns 0 dB" do
-      payload = <<65535::integer-size(16)-unsigned-big>>
+      payload = <<65_535::integer-size(16)-unsigned-big>>
 
       assert {:ok, {[value1, value2], _rest}} =
                Amplitude.find_amplitudes(payload <> payload, @caps_stereo_u16be)
@@ -484,7 +484,7 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
     end
 
     test "if given payload contains exactly one u16be stereo frame which values are equal and neither a min nor max value for this format it returns amplitude in dB" do
-      payload = <<49151::integer-size(16)-unsigned-big>>
+      payload = <<49_151::integer-size(16)-unsigned-big>>
 
       assert {:ok, {[value1, value2], _rest}} =
                Amplitude.find_amplitudes(payload <> payload, @caps_stereo_u16be)
@@ -494,7 +494,7 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
     end
 
     test "if given payload contains exactly one u16be stereo frame that is are the middle of the scale it returns :infinity" do
-      payload = <<32768::integer-size(16)-unsigned-big>>
+      payload = <<32_768::integer-size(16)-unsigned-big>>
 
       assert {:ok, {[value1, value2], _rest}} =
                Amplitude.find_amplitudes(payload <> payload, @caps_stereo_u16be)

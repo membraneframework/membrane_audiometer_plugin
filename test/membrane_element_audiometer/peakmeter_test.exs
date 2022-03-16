@@ -14,7 +14,7 @@ defmodule Membrane.Audiometer.PeakmeterTest do
         elements: [
           source: %Testing.Source{
             output: data,
-            caps: %RawAudio{channels: 1, sample_rate: 44100, sample_format: :s16le}
+            caps: %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :s16le}
           },
           peakmeter: @module,
           sink: Testing.Sink

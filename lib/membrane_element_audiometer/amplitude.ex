@@ -17,7 +17,7 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
 
   * `:empty` - the payload was empty.
   """
-  @spec find_amplitudes(binary, Raw.t()) ::
+  @spec find_amplitudes(binary, RawAudio.t()) ::
           {:ok, {[number | :infinity | :clip], binary}}
           | {:error, any}
   def find_amplitudes(<<>>, _caps) do
