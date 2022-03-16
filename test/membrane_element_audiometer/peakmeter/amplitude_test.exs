@@ -2,30 +2,30 @@ defmodule Membrane.Audiometer.Peakmeter.AmplitudeTest do
   use ExUnit.Case
 
   alias Membrane.Audiometer.Peakmeter.Amplitude
-  alias Membrane.Caps.Audio.Raw
+  alias Membrane.RawAudio
 
-  @caps_mono_u8 %Raw{channels: 1, sample_rate: 44100, format: :u8}
-  @caps_mono_u16le %Raw{channels: 1, sample_rate: 44100, format: :u16le}
-  @caps_mono_u24le %Raw{channels: 1, sample_rate: 44100, format: :u24le}
-  @caps_mono_u32le %Raw{channels: 1, sample_rate: 44100, format: :u32le}
-  @caps_mono_f32le %Raw{channels: 1, sample_rate: 44100, format: :f32le}
-  @caps_mono_f64le %Raw{channels: 1, sample_rate: 44100, format: :f64le}
-  @caps_mono_u16be %Raw{channels: 1, sample_rate: 44100, format: :u16be}
-  @caps_mono_u24be %Raw{channels: 1, sample_rate: 44100, format: :u24be}
-  @caps_mono_u32be %Raw{channels: 1, sample_rate: 44100, format: :u32be}
-  @caps_mono_f32be %Raw{channels: 1, sample_rate: 44100, format: :f32be}
-  @caps_mono_f64be %Raw{channels: 1, sample_rate: 44100, format: :f64be}
-  @caps_stereo_u8 %Raw{channels: 2, sample_rate: 44100, format: :u8}
-  @caps_stereo_u16le %Raw{channels: 2, sample_rate: 44100, format: :u16le}
-  @caps_stereo_u24le %Raw{channels: 2, sample_rate: 44100, format: :u24le}
-  @caps_stereo_u32le %Raw{channels: 2, sample_rate: 44100, format: :u32le}
-  @caps_stereo_u16be %Raw{channels: 2, sample_rate: 44100, format: :u16be}
-  @caps_stereo_u24be %Raw{channels: 2, sample_rate: 44100, format: :u24be}
-  @caps_stereo_u32be %Raw{channels: 2, sample_rate: 44100, format: :u32be}
-  @caps_stereo_f32le %Raw{channels: 2, sample_rate: 44100, format: :f32le}
-  @caps_stereo_f32be %Raw{channels: 2, sample_rate: 44100, format: :f32be}
-  @caps_stereo_f64le %Raw{channels: 2, sample_rate: 44100, format: :f64le}
-  @caps_stereo_f64be %Raw{channels: 2, sample_rate: 44100, format: :f64be}
+  @caps_mono_u8 %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u8}
+  @caps_mono_u16le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u16le}
+  @caps_mono_u24le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u24le}
+  @caps_mono_u32le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u32le}
+  @caps_mono_f32le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :f32le}
+  @caps_mono_f64le %RawAudio{channels: 1, sample_rate: 44100, sample_format: :f64le}
+  @caps_mono_u16be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u16be}
+  @caps_mono_u24be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u24be}
+  @caps_mono_u32be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :u32be}
+  @caps_mono_f32be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :f32be}
+  @caps_mono_f64be %RawAudio{channels: 1, sample_rate: 44100, sample_format: :f64be}
+  @caps_stereo_u8 %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u8}
+  @caps_stereo_u16le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u16le}
+  @caps_stereo_u24le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u24le}
+  @caps_stereo_u32le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u32le}
+  @caps_stereo_u16be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u16be}
+  @caps_stereo_u24be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u24be}
+  @caps_stereo_u32be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :u32be}
+  @caps_stereo_f32le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :f32le}
+  @caps_stereo_f32be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :f32be}
+  @caps_stereo_f64le %RawAudio{channels: 2, sample_rate: 44100, sample_format: :f64le}
+  @caps_stereo_f64be %RawAudio{channels: 2, sample_rate: 44100, sample_format: :f64be}
 
   describe "find_amplitudes/2" do
     # errors
