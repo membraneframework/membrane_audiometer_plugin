@@ -23,6 +23,7 @@ defmodule Membrane.Audiometer.Peakmeter do
   use Membrane.Filter
   alias __MODULE__.Amplitude
   alias Membrane.Caps.Audio.Raw
+  alias Membrane.Element.PadData
 
   @type amplitude_t :: [number | :infinity | :clip]
 
@@ -81,12 +82,12 @@ defmodule Membrane.Audiometer.Peakmeter do
   end
 
   @impl true
-  def handle_tick(:timer, %{pads: %{input: %Membrane.Element.PadData{caps: nil}}}, state) do
+  def handle_tick(:timer, %{pads: %{input: %PadData{caps: nil}}}, state) do
     {{:ok, notify: :underrun}, state}
   end
 
   @impl true
-  def handle_tick(:timer, %{pads: %{input: %Membrane.Element.PadData{caps: caps}}}, state) do
+  def handle_tick(:timer, %{pads: %{input: %PadData{caps: caps}}}, state) do
     frame_size = Raw.frame_size(caps)
 
     if byte_size(state.queue) < frame_size do
