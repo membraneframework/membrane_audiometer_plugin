@@ -1,7 +1,7 @@
 defmodule Membrane.Audiometer.Plugin.Mixfile do
   use Mix.Project
 
-  @version "0.6.0"
+  @version "0.7.0"
   @github_url "https://github.com/membrane_audiometer_plugin"
 
   def project do
