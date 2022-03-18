@@ -23,6 +23,7 @@ defmodule Membrane.Audiometer.Peakmeter do
   use Membrane.Filter
   alias __MODULE__.Amplitude
   alias Membrane.Caps.Audio.Raw
+  alias Membrane.Element.PadData
 
   @type amplitude_t :: [number | :infinity | :clip]
 
@@ -30,11 +31,13 @@ defmodule Membrane.Audiometer.Peakmeter do
     availability: :always,
     mode: :pull,
     caps: Raw,
-    demand_unit: :buffers
+    demand_unit: :buffers,
+    demand_mode: :auto
 
   def_output_pad :output,
     availability: :always,
     mode: :pull,
+    demand_mode: :auto,
     caps: Raw
 
   def_options interval: [
@@ -68,15 +71,6 @@ defmodule Membrane.Audiometer.Peakmeter do
   end
 
   @impl true
-  def handle_demand(:output, size, :buffers, _context, state) do
-    {{:ok, [demand: {:input, size}]}, state}
-  end
-
-  def handle_demand(:output, _size, :bytes, _ctx, state) do
-    {{:ok, demand: :input}, state}
-  end
-
-  @impl true
   def handle_process(
         :input,
         %Membrane.Buffer{payload: payload} = buffer,
@@ -84,16 +78,16 @@ defmodule Membrane.Audiometer.Peakmeter do
         state
       ) do
     new_state = %{state | queue: state.queue <> payload}
-    {{:ok, [buffer: {:output, buffer}, redemand: :output]}, new_state}
+    {{:ok, buffer: {:output, buffer}}, new_state}
   end
 
   @impl true
-  def handle_tick(:timer, %{pads: %{input: %Pad.Data{caps: nil}}}, state) do
+  def handle_tick(:timer, %{pads: %{input: %PadData{caps: nil}}}, state) do
     {{:ok, notify: :underrun}, state}
   end
 
   @impl true
-  def handle_tick(:timer, %{pads: %{input: %Pad.Data{caps: caps}}}, state) do
+  def handle_tick(:timer, %{pads: %{input: %PadData{caps: caps}}}, state) do
     frame_size = Raw.frame_size(caps)
 
     if byte_size(state.queue) < frame_size do
