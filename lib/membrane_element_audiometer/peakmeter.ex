@@ -22,26 +22,17 @@ defmodule Membrane.Audiometer.Peakmeter do
   """
   use Membrane.Filter
   alias __MODULE__.Amplitude
-<<<<<<< HEAD
-  alias Membrane.Caps.Audio.Raw
   alias Membrane.Element.PadData
-=======
   alias Membrane.RawAudio
->>>>>>> 6d61a70 (Update caps)
 
   @type amplitude_t :: [number | :infinity | :clip]
 
   def_input_pad :input,
     availability: :always,
     mode: :pull,
-<<<<<<< HEAD
-    caps: Raw,
+    caps: RawAudio,
     demand_unit: :buffers,
     demand_mode: :auto
-=======
-    caps: RawAudio,
-    demand_unit: :buffers
->>>>>>> 6d61a70 (Update caps)
 
   def_output_pad :output,
     availability: :always,
@@ -91,22 +82,12 @@ defmodule Membrane.Audiometer.Peakmeter do
   end
 
   @impl true
-<<<<<<< HEAD
   def handle_tick(:timer, %{pads: %{input: %PadData{caps: nil}}}, state) do
-=======
-  def handle_tick(:timer, %{pads: %{input: %Membrane.Element.PadData{caps: nil}}}, state) do
->>>>>>> 6d61a70 (Update caps)
     {{:ok, notify: :underrun}, state}
   end
 
-  @impl true
-<<<<<<< HEAD
   def handle_tick(:timer, %{pads: %{input: %PadData{caps: caps}}}, state) do
-    frame_size = Raw.frame_size(caps)
-=======
-  def handle_tick(:timer, %{pads: %{input: %Membrane.Element.PadData{caps: caps}}}, state) do
     frame_size = RawAudio.frame_size(caps)
->>>>>>> 6d61a70 (Update caps)
 
     if byte_size(state.queue) < frame_size do
       {{:ok, notify: {:audiometer, :underrun}}, state}
