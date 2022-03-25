@@ -6,7 +6,7 @@ defmodule Membrane.Audiometer.Peakmeter do
   It uses erlang's `:timer.send_interval/2` which might not provide
   perfect accuracy.
 
-  It accepts data of any format specified in Membrane.Caps.Audio.Raw
+  It accepts audio samples in any format supported by `Membrane.RawAudio`
   module.
 
   It will periodically emit notifications, of the following format:
@@ -22,15 +22,15 @@ defmodule Membrane.Audiometer.Peakmeter do
   """
   use Membrane.Filter
   alias __MODULE__.Amplitude
-  alias Membrane.Caps.Audio.Raw
   alias Membrane.Element.PadData
+  alias Membrane.RawAudio
 
   @type amplitude_t :: [number | :infinity | :clip]
 
   def_input_pad :input,
     availability: :always,
     mode: :pull,
-    caps: Raw,
+    caps: RawAudio,
     demand_unit: :buffers,
     demand_mode: :auto
 
@@ -38,7 +38,7 @@ defmodule Membrane.Audiometer.Peakmeter do
     availability: :always,
     mode: :pull,
     demand_mode: :auto,
-    caps: Raw
+    caps: RawAudio
 
   def_options interval: [
                 type: :integer,
@@ -86,9 +86,8 @@ defmodule Membrane.Audiometer.Peakmeter do
     {{:ok, notify: :underrun}, state}
   end
 
-  @impl true
   def handle_tick(:timer, %{pads: %{input: %PadData{caps: caps}}}, state) do
-    frame_size = Raw.frame_size(caps)
+    frame_size = RawAudio.frame_size(caps)
 
     if byte_size(state.queue) < frame_size do
       {{:ok, notify: {:audiometer, :underrun}}, state}

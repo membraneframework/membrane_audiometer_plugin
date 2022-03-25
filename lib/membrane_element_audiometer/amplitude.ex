@@ -1,7 +1,7 @@
 defmodule Membrane.Audiometer.Peakmeter.Amplitude do
   @moduledoc false
 
-  alias Membrane.Caps.Audio.Raw
+  alias Membrane.RawAudio
 
   @doc """
   Finds frame within given payload that has the highest amplitude for any of its channels.
@@ -17,7 +17,7 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
 
   * `:empty` - the payload was empty.
   """
-  @spec find_amplitudes(binary, Raw.t()) ::
+  @spec find_amplitudes(binary, RawAudio.t()) ::
           {:ok, {[number | :infinity | :clip], binary}}
           | {:error, any}
   def find_amplitudes(<<>>, _caps) do
@@ -26,27 +26,27 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
 
   def find_amplitudes(payload, caps) do
     # Get silence as a point of reference
-    silence_payload = Raw.sound_of_silence(caps)
-    silence_value = Raw.sample_to_value(silence_payload, caps)
+    silence_payload = RawAudio.silence(caps)
+    silence_value = RawAudio.sample_to_value(silence_payload, caps)
 
     # Find max sample values within given payload
     {:ok, {frame_values, rest}} =
       do_find_frame_with_max_values(
         payload,
         caps,
-        Raw.frame_size(caps),
-        Raw.sample_size(caps),
+        RawAudio.frame_size(caps),
+        RawAudio.sample_size(caps),
         silence_value,
         nil
       )
 
     # Convert values into decibels
     max_amplitude_value =
-      if Raw.sample_type_float?(caps) do
+      if RawAudio.sample_type_float?(caps) do
         1.0
       else
         # +1 is needed so max int value for frame does not cause clipping
-        Raw.sample_max(caps) - silence_value + 1
+        RawAudio.sample_max(caps) - silence_value + 1
       end
 
     {:ok, frame_values_in_dbs} = do_convert_values_to_dbs(frame_values, max_amplitude_value, [])
@@ -94,7 +94,7 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
        when byte_size(payload) >= sample_size do
     <<sample::binary-size(sample_size), rest::binary>> = payload
 
-    value = (Raw.sample_to_value(sample, caps) - silence_value) |> abs
+    value = (RawAudio.sample_to_value(sample, caps) - silence_value) |> abs
 
     do_sample_to_channel_values(rest, caps, sample_size, silence_value, [value | acc])
   end

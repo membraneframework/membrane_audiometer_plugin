@@ -1,7 +1,7 @@
 defmodule Membrane.Audiometer.PeakmeterTest do
   use ExUnit.Case, async: true
   import Membrane.Testing.Assertions
-  alias Membrane.Caps.Audio.Raw
+  alias Membrane.RawAudio
   alias Membrane.Testing
 
   @module Membrane.Audiometer.Peakmeter
@@ -14,7 +14,7 @@ defmodule Membrane.Audiometer.PeakmeterTest do
         elements: [
           source: %Testing.Source{
             output: data,
-            caps: %Raw{channels: 1, sample_rate: 44100, format: :s16le}
+            caps: %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :s16le}
           },
           peakmeter: @module,
           sink: Testing.Sink
