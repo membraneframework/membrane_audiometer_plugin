@@ -8,7 +8,6 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
     [
       app: :membrane_audiometer_plugin,
       compilers: Mix.compilers(),
-      preferred_cli_env: [format: :test],
       version: @version,
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
