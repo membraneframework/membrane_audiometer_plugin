@@ -6,7 +6,7 @@ defmodule Membrane.Audiometer.Peakmeter do
   It uses erlang's `:timer.send_interval/2` which might not provide
   perfect accuracy.
 
-  It accepts data of any sample_format specified in Membrane.RawAudio
+  It accepts audio samples in any format supported by `Membrane.RawAudio`
   module.
 
   It will periodically emit notifications, of the following format:
