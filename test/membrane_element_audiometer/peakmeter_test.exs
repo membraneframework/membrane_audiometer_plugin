@@ -22,7 +22,6 @@ defmodule Membrane.Audiometer.PeakmeterTest do
       }
       |> Testing.Pipeline.start_link()
 
-    Testing.Pipeline.play(pipeline)
     assert_pipeline_playback_changed(pipeline, _prev_state, :playing)
 
     assert_pipeline_notified(pipeline, :peakmeter, {:audiometer, :underrun})
@@ -32,7 +31,7 @@ defmodule Membrane.Audiometer.PeakmeterTest do
       assert payload == received_payload
     end)
 
-    Testing.Pipeline.stop_and_terminate(pipeline, blocking?: true)
+    Testing.Pipeline.terminate(pipeline, blocking?: true)
     assert_pipeline_playback_changed(pipeline, _prev_state, :stopped)
   end
 end
