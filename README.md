@@ -1,4 +1,4 @@
-# Membrane Multimedia Framework: AudioMeter Element
+# Membrane AudioMeter plugin
 
 [![Hex.pm](https://img.shields.io/hexpm/v/membrane_audiometer_plugin.svg)](https://hex.pm/packages/membrane_audiometer_plugin)
 [![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/membrane_audiometer_plugin/)

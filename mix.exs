@@ -12,10 +12,7 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
-      dialyzer: [
-        plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
-        flags: [:error_handling]
-      ],
+      dialyzer: dialyzer(),
 
       # hex
       description: "Element capable of measuring audio level",
@@ -56,6 +53,19 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
       },
       files: ["lib", "mix.exs", "README*", "LICENSE*", ".formatter.exs"]
     ]
+  end
+
+  defp dialyzer() do
+    opts = [
+      flags: [:error_handling]
+    ]
+
+    if System.get_env("CI") == "true" do
+      # Store PLTs in cacheable directory for CI
+      [plt_local_path: "priv/plts", plt_core_path: "priv/plts"] ++ opts
+    else
+      opts
+    end
   end
 
   defp deps do
