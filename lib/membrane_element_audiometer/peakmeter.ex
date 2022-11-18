@@ -68,7 +68,7 @@ defmodule Membrane.Audiometer.Peakmeter do
 
   @impl true
   def handle_terminate_request(_ctx, state) do
-    {[stop_timer: :timer], state}
+    {[stop_timer: :timer, terminate: :normal], state}
   end
 
   @impl true
