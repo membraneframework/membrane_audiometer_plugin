@@ -20,33 +20,33 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
   @spec find_amplitudes(binary, RawAudio.t()) ::
           {:ok, {[number | :infinity | :clip], binary}}
           | {:error, any}
-  def find_amplitudes(<<>>, _caps) do
+  def find_amplitudes(<<>>, _stream_format) do
     {:error, :empty}
   end
 
-  def find_amplitudes(payload, caps) do
+  def find_amplitudes(payload, stream_format) do
     # Get silence as a point of reference
-    silence_payload = RawAudio.silence(caps)
-    silence_value = RawAudio.sample_to_value(silence_payload, caps)
+    silence_payload = RawAudio.silence(stream_format)
+    silence_value = RawAudio.sample_to_value(silence_payload, stream_format)
 
     # Find max sample values within given payload
     {:ok, {frame_values, rest}} =
       do_find_frame_with_max_values(
         payload,
-        caps,
-        RawAudio.frame_size(caps),
-        RawAudio.sample_size(caps),
+        stream_format,
+        RawAudio.frame_size(stream_format),
+        RawAudio.sample_size(stream_format),
         silence_value,
         nil
       )
 
     # Convert values into decibels
     max_amplitude_value =
-      if RawAudio.sample_type_float?(caps) do
+      if RawAudio.sample_type_float?(stream_format) do
         1.0
       else
         # +1 is needed so max int value for frame does not cause clipping
-        RawAudio.sample_max(caps) - silence_value + 1
+        RawAudio.sample_max(stream_format) - silence_value + 1
       end
 
     {:ok, frame_values_in_dbs} = do_convert_values_to_dbs(frame_values, max_amplitude_value, [])
@@ -56,20 +56,27 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
   end
 
   # If we have at least one frame in the payload, get values of its samples.
-  defp do_find_frame_with_max_values(payload, caps, frame_size, sample_size, silence_value, acc)
+  defp do_find_frame_with_max_values(
+         payload,
+         stream_format,
+         frame_size,
+         sample_size,
+         silence_value,
+         acc
+       )
        when byte_size(payload) >= frame_size do
     <<frame::binary-size(frame_size), rest::binary>> = payload
 
     # Get list of sample values per channel, normalized to 0..n scale
     {:ok, sample_values} =
-      do_sample_to_channel_values(frame, caps, sample_size, silence_value, [])
+      do_sample_to_channel_values(frame, stream_format, sample_size, silence_value, [])
 
     # Check if the new frame is louder than the last known loudest
     {:ok, max_sample_values} = do_find_max_sample_values(acc, sample_values)
 
     do_find_frame_with_max_values(
       rest,
-      caps,
+      stream_format,
       frame_size,
       sample_size,
       silence_value,
@@ -81,7 +88,7 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
   # and the remaning payload.
   defp do_find_frame_with_max_values(
          payload,
-         _caps,
+         _stream_format,
          _frame_size,
          _sample_size,
          _silence_value,
@@ -90,17 +97,17 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
        do: {:ok, {acc, payload}}
 
   # If there's any payload, convert sample data to actual values normalized on 0..n scale
-  defp do_sample_to_channel_values(payload, caps, sample_size, silence_value, acc)
+  defp do_sample_to_channel_values(payload, stream_format, sample_size, silence_value, acc)
        when byte_size(payload) >= sample_size do
     <<sample::binary-size(sample_size), rest::binary>> = payload
 
-    value = (RawAudio.sample_to_value(sample, caps) - silence_value) |> abs
+    value = (RawAudio.sample_to_value(sample, stream_format) - silence_value) |> abs
 
-    do_sample_to_channel_values(rest, caps, sample_size, silence_value, [value | acc])
+    do_sample_to_channel_values(rest, stream_format, sample_size, silence_value, [value | acc])
   end
 
   # If there's no more payload in the frame, return a list with sample values per channel.
-  defp do_sample_to_channel_values(<<>>, _caps, _sample_size, _silence_value, acc),
+  defp do_sample_to_channel_values(<<>>, _stream_format, _sample_size, _silence_value, acc),
     do: {:ok, Enum.reverse(acc)}
 
   # If there's no previous sample known, current one has to be louder.
