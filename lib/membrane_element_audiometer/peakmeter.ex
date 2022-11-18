@@ -41,11 +41,12 @@ defmodule Membrane.Audiometer.Peakmeter do
     accepted_format: RawAudio
 
   def_options interval: [
-                type: :integer,
+                spec: Membrane.Time.t(),
                 description: """
                 How often peakmeter should emit messages containing sound level (in Membrane.Time units).
                 """,
-                default: 50 |> Membrane.Time.milliseconds()
+                default: Membrane.Time.milliseconds(50),
+                inspector: &Membrane.Time.inspect/1
               ]
 
   # Private API
