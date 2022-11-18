@@ -30,7 +30,7 @@ defmodule Membrane.Audiometer.Peakmeter do
   def_input_pad :input,
     availability: :always,
     mode: :pull,
-    caps: RawAudio,
+    accepted_format: RawAudio,
     demand_unit: :buffers,
     demand_mode: :auto
 
@@ -38,7 +38,7 @@ defmodule Membrane.Audiometer.Peakmeter do
     availability: :always,
     mode: :pull,
     demand_mode: :auto,
-    caps: RawAudio
+    accepted_format: RawAudio
 
   def_options interval: [
                 type: :integer,
@@ -51,49 +51,49 @@ defmodule Membrane.Audiometer.Peakmeter do
   # Private API
 
   @impl true
-  def handle_init(%__MODULE__{interval: interval}) do
+  def handle_init(_ctx, %__MODULE__{interval: interval}) do
     state = %{
       interval: interval,
       queue: <<>>
     }
 
-    {:ok, state}
+    {[], state}
   end
 
   @impl true
-  def handle_prepared_to_playing(_ctx, state) do
-    {{:ok, start_timer: {:timer, state.interval}}, state}
+  def handle_playing(_ctx, state) do
+    {[start_timer: {:timer, state.interval}], state}
   end
 
   @impl true
-  def handle_prepared_to_stopped(_ctx, state) do
-    {{:ok, stop_timer: :timer}, state}
+  def handle_terminate_request(_ctx, state) do
+    {[stop_timer: :timer], state}
   end
 
   @impl true
   def handle_process(
         :input,
         %Membrane.Buffer{payload: payload} = buffer,
-        _context,
+        _ctx,
         state
       ) do
     new_state = %{state | queue: state.queue <> payload}
-    {{:ok, buffer: {:output, buffer}}, new_state}
+    {[buffer: {:output, buffer}], new_state}
   end
 
   @impl true
-  def handle_tick(:timer, %{pads: %{input: %PadData{caps: nil}}}, state) do
-    {{:ok, notify: :underrun}, state}
+  def handle_tick(:timer, %{pads: %{input: %PadData{stream_format: nil}}}, state) do
+    {[notify_parent: :underrun], state}
   end
 
-  def handle_tick(:timer, %{pads: %{input: %PadData{caps: caps}}}, state) do
-    frame_size = RawAudio.frame_size(caps)
+  def handle_tick(:timer, %{pads: %{input: %PadData{stream_format: stream_format}}}, state) do
+    frame_size = RawAudio.frame_size(stream_format)
 
     if byte_size(state.queue) < frame_size do
-      {{:ok, notify: {:audiometer, :underrun}}, state}
+      {[notify_parent: {:audiometer, :underrun}], state}
     else
-      {:ok, {amplitudes, rest}} = Amplitude.find_amplitudes(state.queue, caps)
-      {{:ok, notify: {:amplitudes, amplitudes}}, %{state | queue: rest}}
+      {:ok, {amplitudes, rest}} = Amplitude.find_amplitudes(state.queue, stream_format)
+      {[notify_parent: {:amplitudes, amplitudes}], %{state | queue: rest}}
     end
   end
 end
