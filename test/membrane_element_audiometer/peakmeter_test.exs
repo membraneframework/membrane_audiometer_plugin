@@ -10,19 +10,6 @@ defmodule Membrane.Audiometer.PeakmeterTest do
   test "integration" do
     data = [1, 2, 3, 2, 1] |> Enum.map(&<<&1>>)
 
-    # {:ok, pipeline} =
-      # %Testing.Pipeline.Options{
-      #   elements: [
-      #     source: %Testing.Source{
-      #       output: data,
-      #       stream_format: %RawAudio{channels: 1, sample_rate: 44_100, sample_format: :s16le}
-      #     },
-      #     peakmeter: @module,
-      #     sink: Testing.Sink
-      #   ]
-      # }
-      # |> Testing.Pipeline.start_link_supervised!()
-
     links = [
       child(:source, %Testing.Source{
         output: data,
@@ -46,7 +33,5 @@ defmodule Membrane.Audiometer.PeakmeterTest do
       assert_sink_buffer(pipeline, :sink, %Membrane.Buffer{payload: received_payload})
       assert payload == received_payload
     end)
-
-    Testing.Pipeline.terminate(pipeline, blocking?: true)
   end
 end
