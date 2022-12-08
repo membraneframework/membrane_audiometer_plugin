@@ -67,11 +67,6 @@ defmodule Membrane.Audiometer.Peakmeter do
   end
 
   @impl true
-  def handle_terminate_request(_ctx, state) do
-    {[terminate: :normal], state}
-  end
-
-  @impl true
   def handle_process(
         :input,
         %Membrane.Buffer{payload: payload} = buffer,
