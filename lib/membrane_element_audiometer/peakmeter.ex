@@ -29,15 +29,10 @@ defmodule Membrane.Audiometer.Peakmeter do
 
   def_input_pad :input,
     availability: :always,
-    mode: :pull,
-    accepted_format: RawAudio,
-    demand_unit: :buffers,
-    demand_mode: :auto
+    accepted_format: RawAudio
 
   def_output_pad :output,
     availability: :always,
-    mode: :pull,
-    demand_mode: :auto,
     accepted_format: RawAudio
 
   def_options interval: [
@@ -67,7 +62,7 @@ defmodule Membrane.Audiometer.Peakmeter do
   end
 
   @impl true
-  def handle_process(
+  def handle_buffer(
         :input,
         %Membrane.Buffer{payload: payload} = buffer,
         _ctx,

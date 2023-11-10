@@ -15,7 +15,7 @@ It is part of [Membrane Multimedia Framework](https://membraneframework.org).
 Add the following line to your `deps` in `mix.exs`.  Run `mix deps.get`.
 
 ```elixir
-{:membrane_audiometer_plugin, "~> 0.11.1"}
+{:membrane_audiometer_plugin, "~> 0.12.0"}
 ```
 
 ## Copyright and License
