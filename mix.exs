@@ -1,7 +1,7 @@
 defmodule Membrane.Audiometer.Plugin.Mixfile do
   use Mix.Project
 
-  @version "0.12.1"
+  @version "0.12.2"
   @github_url "https://github.com/membraneframework/membrane_audiometer_plugin"
 
   def project do
@@ -22,7 +22,8 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
       name: "Membrane Audiometer plugin",
       source_url: @github_url,
       docs: docs(),
-      homepage_url: "https://membraneframework.org"
+      homepage_url: "https://membraneframework.org",
+      aliases: [docs: ["docs", &prepend_llms_links/1]]
     ]
   end
 
@@ -38,8 +39,7 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
       main: "readme",
       extras: ["README.md", "LICENSE"],
       source_ref: "v#{@version}",
-      nest_modules_by_prefix: ["Membrane.Audiometer"],
-      formatters: ["html"]
+      nest_modules_by_prefix: ["Membrane.Audiometer"]
     ]
   end
 
@@ -73,9 +73,31 @@ defmodule Membrane.Audiometer.Plugin.Mixfile do
     [
       {:membrane_core, "~> 1.0"},
       {:membrane_raw_audio_format, "~> 0.12.0"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.40", only: :dev, runtime: false},
       {:credo, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyxir, ">= 0.0.0", only: :dev, runtime: false}
     ]
+  end
+
+  defp prepend_llms_links(_) do
+    output_dir = docs()[:output] || "doc"
+    path = Path.join(output_dir, "llms.txt")
+
+    if File.exists?(path) do
+      existing = File.read!(path)
+
+      footer = """
+
+
+      ## See Also
+
+      - [Membrane Framework AI Skill](https://hexdocs.pm/membrane_core/skill.md)
+      - [Membrane Core](https://hexdocs.pm/membrane_core/llms.txt)
+      """
+
+      File.write!(path, String.trim_trailing(existing) <> footer)
+    else
+      IO.warn("#{path} not found — llms.txt was not generated, check your ex_doc configuration")
+    end
   end
 end
