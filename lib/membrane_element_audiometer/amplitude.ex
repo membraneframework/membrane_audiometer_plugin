@@ -65,7 +65,7 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
          acc
        )
        when byte_size(payload) >= frame_size do
-    <<frame::binary-size(frame_size), rest::binary>> = payload
+    <<frame::binary-size(^frame_size), rest::binary>> = payload
 
     # Get list of sample values per channel, normalized to 0..n scale
     {:ok, sample_values} =
@@ -99,7 +99,7 @@ defmodule Membrane.Audiometer.Peakmeter.Amplitude do
   # If there's any payload, convert sample data to actual values normalized on 0..n scale
   defp do_sample_to_channel_values(payload, stream_format, sample_size, silence_value, acc)
        when byte_size(payload) >= sample_size do
-    <<sample::binary-size(sample_size), rest::binary>> = payload
+    <<sample::binary-size(^sample_size), rest::binary>> = payload
 
     value = (RawAudio.sample_to_value(sample, stream_format) - silence_value) |> abs
 
